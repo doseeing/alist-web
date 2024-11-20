@@ -3,6 +3,7 @@ import { defineConfig } from "vite"
 import solidPlugin from "vite-plugin-solid"
 import legacy from "@vitejs/plugin-legacy"
 import { dynamicBase } from "vite-plugin-dynamic-base"
+import vercel from "vite-plugin-vercel"
 
 export default defineConfig({
   resolve: {
@@ -22,6 +23,7 @@ export default defineConfig({
       // dynamic load resources on index.html, default false. maybe change default true
       transformIndexHtml: true,
     }),
+    vercel(),
   ],
   base: process.env.NODE_ENV === "production" ? "/__dynamic_base__/" : "/",
   // base: "/",
