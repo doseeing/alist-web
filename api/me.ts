@@ -1,4 +1,8 @@
-const data = {
+import jwt from "jsonwebtoken"
+
+const jwtSecret = "shhhhh"
+
+const successResult = {
   code: 200,
   message: "success",
   data: {
@@ -14,6 +18,21 @@ const data = {
   },
 }
 
+const failResult = {
+  code: 401,
+  message: "Guest user is disabled, login please",
+  data: null,
+}
+
 export function GET(request: Request) {
-  return new Response(JSON.stringify(data))
+  try {
+    const token = request.headers.get("Authorization")
+    if (!token) {
+      return new Response(JSON.stringify(failResult))
+    }
+    let decoded = jwt.verify(token, jwtSecret)
+  } catch (err) {
+    return new Response(JSON.stringify(failResult))
+  }
+  return new Response(JSON.stringify(successResult))
 }
