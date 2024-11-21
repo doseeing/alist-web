@@ -7,3 +7,6 @@ pnpm-lock.yaml
 *.ttf
 *.otf
 *.woff2
+api/
+.env.development
+.env.production
