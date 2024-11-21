@@ -6,6 +6,7 @@ export async function GET(request: Request) {
   // remove prefix /p
   pathname = pathname.slice(2)
   const url = prefix + pathname
+  console.log(url)
   // get file content
   const response = await fetch(url)
   return new Response(await response.blob())

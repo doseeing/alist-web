@@ -46,14 +46,15 @@ export async function POST(request: Request) {
   }
 
   const response = await list({ prefix: prefix, mode: "folded" })
-  // console.log(response)
+  console.log(response)
   const content = response.blobs
     .filter((blob) => {
       return blob.pathname != prefix
     })
     .map((blob) => {
+      const pathname = new URL(blob.url).pathname.slice(1)
       return {
-        name: blob.pathname.slice(prefix.length),
+        name: pathname.slice(prefix.length),
         size: blob.size,
         is_dir: false,
         modified: "2024-10-10T14:22:20.462+08:00",

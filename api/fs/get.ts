@@ -49,8 +49,8 @@ export async function POST(request: Request) {
   if (body.path === "/") {
     return new Response(JSON.stringify(folderResult))
   }
-
   const prefix = "https://e55pxoq9qdhbem5g.public.blob.vercel-storage.com"
+  console.log(prefix + body.path)
   const response = await head(prefix + body.path)
   const data = {
     name: response.pathname,
