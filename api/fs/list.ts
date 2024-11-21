@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     })
   response.folders.forEach((folder) => {
     content.push({
-      name: folder.slice(0, -1),
+      name: folder.slice(prefix.length).slice(0, -1),
       size: 0,
       is_dir: true,
       modified: "2024-10-10T14:22:20.462+08:00",
