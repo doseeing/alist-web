@@ -1,3 +1,5 @@
+import { head } from "@vercel/blob"
+
 const folderResult = {
   code: 200,
   message: "success",
@@ -47,5 +49,28 @@ export async function POST(request: Request) {
   if (body.path === "/") {
     return new Response(JSON.stringify(folderResult))
   }
+
+  const prefix = "https://e55pxoq9qdhbem5g.public.blob.vercel-storage.com"
+  const response = await head(prefix + body.path)
+  const data = {
+    name: response.pathname,
+    size: 396,
+    is_dir: false,
+    modified: "2024-11-07T14:11:58.344+08:00",
+    created: "2024-11-20T19:38:18.47825107+08:00",
+    sign: "Bfchmp6KGMnar88eiKycZ-BRppghpK-pwzRwPFimBzQ=:0",
+    thumb: "",
+    type: 4,
+    hashinfo: "null",
+    hash_info: null,
+    raw_url: response.url,
+    readme: "",
+    header: "",
+    provider: "Local",
+    related: null,
+  }
+
+  fileResult.data = data
+
   return new Response(JSON.stringify(fileResult))
 }

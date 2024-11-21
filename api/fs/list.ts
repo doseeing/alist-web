@@ -1,3 +1,5 @@
+import { list } from "@vercel/blob"
+
 const data = {
   code: 200,
   message: "success",
@@ -35,6 +37,23 @@ const data = {
     provider: "Local",
   },
 }
-export function POST(request: Request) {
+export async function POST(request: Request) {
+  const response = await list()
+  // console.log(response.blobs)
+  const content = response.blobs.map((blob) => {
+    return {
+      name: blob.pathname,
+      size: blob.size,
+      is_dir: false,
+      modified: "2024-10-10T14:22:20.462+08:00",
+      created: "2024-11-20T19:39:32.040665728+08:00",
+      sign: "",
+      thumb: "",
+      type: 5,
+      hashinfo: "null",
+      hash_info: null,
+    }
+  })
+  data.data.content = content
   return new Response(JSON.stringify(data))
 }
