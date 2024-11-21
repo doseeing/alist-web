@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     prefix = ""
   }
 
-  const response = await list({ prefix: prefix })
+  const response = await list({ prefix: prefix, mode: "folded" })
   const content = response.blobs
     .filter((blob) => {
       return blob.pathname != prefix
@@ -53,7 +53,9 @@ export async function POST(request: Request) {
     .map((blob) => {
       const isDir = blob.pathname.endsWith("/")
       return {
-        name: isDir ? blob.pathname.slice(0, -1) : blob.pathname,
+        name: isDir
+          ? blob.pathname.slice(0, -1).slice(prefix.length)
+          : blob.pathname.slice(prefix.length),
         size: blob.size,
         is_dir: isDir,
         modified: "2024-10-10T14:22:20.462+08:00",
