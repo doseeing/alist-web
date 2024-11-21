@@ -1,4 +1,5 @@
 import { list } from "@vercel/blob"
+import { blob } from "stream/consumers"
 
 const data = {
   code: 200,
@@ -38,23 +39,32 @@ const data = {
   },
 }
 export async function POST(request: Request) {
-  const response = await list()
-  // console.log(response.blobs)
-  const content = response.blobs.map((blob) => {
-    const isDir = blob.pathname.endsWith("/")
-    return {
-      name: isDir ? blob.pathname.slice(0, -1) : blob.pathname,
-      size: blob.size,
-      is_dir: isDir,
-      modified: "2024-10-10T14:22:20.462+08:00",
-      created: "2024-11-20T19:39:32.040665728+08:00",
-      sign: "",
-      thumb: "",
-      type: isDir ? 1 : 5,
-      hashinfo: "null",
-      hash_info: null,
-    }
-  })
+  const body = await request.json()
+  let prefix = body.path.slice(1) + "/"
+  if (prefix == "/") {
+    prefix = ""
+  }
+
+  const response = await list({ prefix: prefix })
+  const content = response.blobs
+    .filter((blob) => {
+      return blob.pathname != prefix
+    })
+    .map((blob) => {
+      const isDir = blob.pathname.endsWith("/")
+      return {
+        name: isDir ? blob.pathname.slice(0, -1) : blob.pathname,
+        size: blob.size,
+        is_dir: isDir,
+        modified: "2024-10-10T14:22:20.462+08:00",
+        created: "2024-11-20T19:39:32.040665728+08:00",
+        sign: "",
+        thumb: "",
+        type: isDir ? 1 : 5,
+        hashinfo: "null",
+        hash_info: null,
+      }
+    })
   data.data.content = content
   return new Response(JSON.stringify(data))
 }
