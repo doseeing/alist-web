@@ -44,12 +44,12 @@ export async function POST(request: Request) {
     return {
       name: blob.pathname,
       size: blob.size,
-      is_dir: false,
+      is_dir: blob.pathname.endsWith("/"),
       modified: "2024-10-10T14:22:20.462+08:00",
       created: "2024-11-20T19:39:32.040665728+08:00",
       sign: "",
       thumb: "",
-      type: 5,
+      type: blob.pathname.endsWith("/") ? 1 : 5,
       hashinfo: "null",
       hash_info: null,
     }
