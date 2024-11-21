@@ -6,6 +6,8 @@
     "email": "i@nn.ci",
     "url": "https://www.nn.ci"
   },
+  "type": "module",
+  "comment_about_type": "https://github.com/orgs/vercel/discussions/1225",
   "description": "The front end of Alist V3",
   "packageManager": "pnpm@9.9.0",
   "repository": {
