@@ -50,10 +50,11 @@ export async function POST(request: Request) {
     return new Response(JSON.stringify(folderResult))
   }
   const prefix = "https://e55pxoq9qdhbem5g.public.blob.vercel-storage.com"
-  console.log(prefix + body.path)
+  // console.log(prefix + body.path)
   const response = await head(prefix + body.path)
+  const pathname = new URL(response.url).pathname.slice(1)
   const data = {
-    name: response.pathname,
+    name: pathname.slice(prefix.length),
     size: 396,
     is_dir: false,
     modified: "2024-11-07T14:11:58.344+08:00",
