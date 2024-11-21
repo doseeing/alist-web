@@ -5,7 +5,6 @@ const jwtSecret = "shhhhh"
 export async function POST(request: Request) {
   // check password hash
   const body: any = await request.json()
-  console.log(body)
   if (body.username !== "admin") {
     const failResult = {
       code: 400,

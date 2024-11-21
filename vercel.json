@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/p/(.*)",
+      "dest": "/api/p.ts"
+    }
+  ]
+}
