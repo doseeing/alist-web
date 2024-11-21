@@ -54,7 +54,7 @@ export async function POST(request: Request) {
   const response = await head(prefix + body.path)
   const pathname = new URL(response.url).pathname.slice(1)
   const data = {
-    name: pathname.split("/").pop(),
+    name: decodeURIComponent(pathname.split("/").pop() || ""),
     size: 396,
     is_dir: false,
     modified: "2024-11-07T14:11:58.344+08:00",
