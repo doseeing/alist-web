@@ -22,7 +22,7 @@ const folderResult = {
   },
 }
 
-const fileResult = {
+const fileResult: any = {
   code: 200,
   message: "success",
   data: {
