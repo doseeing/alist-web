@@ -41,15 +41,16 @@ export async function POST(request: Request) {
   const response = await list()
   // console.log(response.blobs)
   const content = response.blobs.map((blob) => {
+    const isDir = blob.pathname.endsWith("/")
     return {
-      name: blob.pathname,
+      name: isDir ? blob.pathname.slice(0, -1) : blob.pathname,
       size: blob.size,
-      is_dir: blob.pathname.endsWith("/"),
+      is_dir: isDir,
       modified: "2024-10-10T14:22:20.462+08:00",
       created: "2024-11-20T19:39:32.040665728+08:00",
       sign: "",
       thumb: "",
-      type: blob.pathname.endsWith("/") ? 1 : 5,
+      type: isDir ? 1 : 5,
       hashinfo: "null",
       hash_info: null,
     }
