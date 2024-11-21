@@ -46,27 +46,39 @@ export async function POST(request: Request) {
   }
 
   const response = await list({ prefix: prefix, mode: "folded" })
+  // console.log(response)
   const content = response.blobs
     .filter((blob) => {
       return blob.pathname != prefix
     })
     .map((blob) => {
-      const isDir = blob.pathname.endsWith("/")
       return {
-        name: isDir
-          ? blob.pathname.slice(0, -1).slice(prefix.length)
-          : blob.pathname.slice(prefix.length),
+        name: blob.pathname.slice(prefix.length),
         size: blob.size,
-        is_dir: isDir,
+        is_dir: false,
         modified: "2024-10-10T14:22:20.462+08:00",
         created: "2024-11-20T19:39:32.040665728+08:00",
         sign: "",
         thumb: "",
-        type: isDir ? 1 : 5,
+        type: 5,
         hashinfo: "null",
         hash_info: null,
       }
     })
+  response.folders.forEach((folder) => {
+    content.push({
+      name: folder.slice(0, -1),
+      size: 0,
+      is_dir: true,
+      modified: "2024-10-10T14:22:20.462+08:00",
+      created: "2024-11-20T19:39:32.040665728+08:00",
+      sign: "",
+      thumb: "",
+      type: 1,
+      hashinfo: "null",
+      hash_info: null,
+    })
+  })
   data.data.content = content
   return new Response(JSON.stringify(data))
 }
