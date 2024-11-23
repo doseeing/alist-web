@@ -11,6 +11,11 @@ export async function POST(request: Request) {
     access: "public",
     addRandomSuffix: false,
   })
+  const data = {
+    code: 200,
+    message: "success",
+    data: null,
+  }
 
-  return new Response("")
+  return new Response(JSON.stringify(data))
 }
