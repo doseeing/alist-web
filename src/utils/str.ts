@@ -26,6 +26,7 @@ const full = (p: number) => {
 }
 
 export function formatDate(dateStr: string) {
+  if (!dateStr) return ""
   const date = new Date(dateStr)
   const year = date.getFullYear()
   const mon = date.getMonth() + 1
