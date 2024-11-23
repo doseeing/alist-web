@@ -82,14 +82,14 @@ const App: Component = () => {
           <Routes base={base_path}>
             <Route path="/@test" component={Test} />
             <Route path="/@login" component={Login} />
-            <Route
+            {/* <Route
               path="/@manage/*"
               element={
                 <MustUser>
                   <Manage />
                 </MustUser>
               }
-            />
+            /> */}
             <Route
               path="*"
               element={

@@ -1,11 +1,22 @@
 import jwt from "jsonwebtoken"
+import sha256 from "sha256"
 
-const jwtSecret = "shhhhh"
+const hash_salt = "https://github.com/alist-org/alist"
+
+function hashPwd(pwd: string) {
+  return sha256(`${pwd}-${hash_salt}`)
+}
 
 export async function POST(request: Request) {
   // check password hash
   const body: any = await request.json()
-  if (body.username !== "admin") {
+  const username = process.env.ADMIN_USERNAME
+  const password = process.env.ADMIN_PASSWORD
+  if (username === undefined || password === undefined) {
+    throw new Error("ADMIN_USERNAME or ADMIN_PASSWORD is not set")
+  }
+
+  if (body.username !== username || body.password !== hashPwd(password)) {
     const failResult = {
       code: 400,
       message: "password is incorrect",
@@ -13,17 +24,23 @@ export async function POST(request: Request) {
     }
     return new Response(JSON.stringify(failResult))
   }
-  // TODO: persist the password hash in KV
-  const passwordCreatedTimestamp = 1732102259
+
+  const passwordCreatedTimestamp = 0
   const nowTimestamp = Math.floor(Date.now() / 1000)
   const expiredTimestamp = nowTimestamp + 86400
   const payload = {
-    username: "admin",
+    username: username,
     pwd_ts: passwordCreatedTimestamp,
     exp: expiredTimestamp,
     nbf: nowTimestamp,
     iat: nowTimestamp,
   }
+  const jwtSecret = process.env.JWT_SECRET
+
+  if (jwtSecret === undefined) {
+    throw new Error("JWT_SECRET is not set")
+  }
+
   var token = jwt.sign(payload, jwtSecret)
   const successResult = {
     code: 200,

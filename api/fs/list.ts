@@ -44,7 +44,6 @@ export async function POST(request: Request) {
   if (prefix == "/") {
     prefix = ""
   }
-
   const response = await list({ prefix: prefix, mode: "folded" })
   console.log(response)
   const content = response.blobs
