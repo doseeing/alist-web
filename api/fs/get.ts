@@ -49,9 +49,8 @@ export async function POST(request: Request) {
   if (body.path === "/") {
     return new Response(JSON.stringify(folderResult))
   }
-  const prefix = "https://e55pxoq9qdhbem5g.public.blob.vercel-storage.com"
   // console.log(prefix + body.path)
-  const response = await head(prefix + body.path)
+  const response = await head(process.env.BLOB_URL + body.path)
   const pathname = new URL(response.url).pathname.slice(1)
   const data = {
     name: decodeURIComponent(pathname.split("/").pop() || ""),
