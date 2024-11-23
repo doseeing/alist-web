@@ -1,18 +1,5 @@
 import { put } from "@vercel/blob"
-const data = {
-  code: 200,
-  message: "success",
-  data: {
-    task: {
-      id: "sdH2LbjyWRk",
-      name: "upload animated_zoom.gif to [/data](/alist)",
-      state: 0,
-      status: "uploading",
-      progress: 0,
-      error: "",
-    },
-  },
-}
+
 export async function PUT(request: Request) {
   const filePath = request.headers.get("File-Path")
   const fileContent = await request.blob()
@@ -23,6 +10,20 @@ export async function PUT(request: Request) {
     access: "public",
     addRandomSuffix: false,
   })
+  const data = {
+    code: 200,
+    message: "success",
+    data: {
+      task: {
+        id: "",
+        name: "upload animated_zoom.gif to [/data](/alist)",
+        state: 0,
+        status: "uploading",
+        progress: 0,
+        error: "",
+      },
+    },
+  }
 
-  return new Response("")
+  return new Response(JSON.stringify(data))
 }
