@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { hashPwd } from "../../lib.js"
+import { hashPwd } from "../../../_lib/hash.js"
 
 export async function POST(request: Request) {
   // check password hash

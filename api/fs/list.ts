@@ -1,5 +1,5 @@
 import { list } from "@vercel/blob"
-import { getFileType, ObjType } from "../lib.js"
+import { getFileType, ObjType } from "../../_lib/filetypes.js"
 
 export async function POST(request: Request) {
   const body = await request.json()

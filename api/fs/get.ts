@@ -1,5 +1,5 @@
 import { head } from "@vercel/blob"
-import { getFileType, ObjType } from "../lib.js"
+import { getFileType, ObjType } from "../../_lib/filetypes.js"
 
 const rootResult = {
   code: 200,
