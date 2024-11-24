@@ -22,7 +22,7 @@
       "dest": "/api/$1"
     },
     {
-      "src": "/asset/(.*)",
+      "src": "/assets/(.*)",
       "check": true
     },
     {
