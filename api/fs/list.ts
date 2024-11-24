@@ -24,16 +24,17 @@ function sliceContains(slice: string[], value?: string) {
 }
 export function getFileType(filename: string) {
   const ext = filename.split(".").pop()
+
   if (sliceContains(SlicesMap[ObjType.AUDIO], ext)) {
     return ObjType.AUDIO
   }
-  if (sliceContains(SlicesMap[ObjType.AUDIO], ext)) {
+  if (sliceContains(SlicesMap[ObjType.VIDEO], ext)) {
     return ObjType.VIDEO
   }
-  if (sliceContains(SlicesMap[ObjType.AUDIO], ext)) {
+  if (sliceContains(SlicesMap[ObjType.IMAGE], ext)) {
     return ObjType.IMAGE
   }
-  if (sliceContains(SlicesMap[ObjType.AUDIO], ext)) {
+  if (sliceContains(SlicesMap[ObjType.TEXT], ext)) {
     return ObjType.TEXT
   }
   return ObjType.UNKNOWN
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
   if (prefix == "/") {
     prefix = ""
   }
+  console.log(getFileType("asjfoiojf.png"))
   const response = await list({ prefix: prefix, mode: "folded" })
   // console.log(response)
   const content = response.blobs

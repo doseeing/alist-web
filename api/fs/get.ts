@@ -27,13 +27,13 @@ export function getFileType(filename: string) {
   if (sliceContains(SlicesMap[ObjType.AUDIO], ext)) {
     return ObjType.AUDIO
   }
-  if (sliceContains(SlicesMap[ObjType.AUDIO], ext)) {
+  if (sliceContains(SlicesMap[ObjType.VIDEO], ext)) {
     return ObjType.VIDEO
   }
-  if (sliceContains(SlicesMap[ObjType.AUDIO], ext)) {
+  if (sliceContains(SlicesMap[ObjType.IMAGE], ext)) {
     return ObjType.IMAGE
   }
-  if (sliceContains(SlicesMap[ObjType.AUDIO], ext)) {
+  if (sliceContains(SlicesMap[ObjType.TEXT], ext)) {
     return ObjType.TEXT
   }
   return ObjType.UNKNOWN
