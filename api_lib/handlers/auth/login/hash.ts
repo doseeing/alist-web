@@ -1,7 +1,10 @@
 import jwt from "jsonwebtoken"
-import { hashPwd } from "../../../_lib/hash.js"
+import { hashPwd } from "../../../hash.js"
 
 export async function POST(request: Request) {
+  console.log(request)
+  const pathname = new URL(request.url).pathname
+  console.log(pathname)
   // check password hash
   const body: any = await request.json()
   const username = process.env.ADMIN_USERNAME
