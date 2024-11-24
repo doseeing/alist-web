@@ -1,11 +1,5 @@
 import jwt from "jsonwebtoken"
-import sha256 from "sha256"
-
-const hash_salt = "https://github.com/alist-org/alist"
-
-export function hashPwd(pwd: string) {
-  return sha256(`${pwd}-${hash_salt}`)
-}
+import { hashPwd } from "../../lib.js"
 
 export async function POST(request: Request) {
   // check password hash
