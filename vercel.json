@@ -7,7 +7,7 @@
     },
     {
       "src": "/d/(.*)",
-      "dest": "/api/d.ts"
+      "dest": "/api/p.ts"
     }
   ]
 }
