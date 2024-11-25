@@ -18,6 +18,10 @@
       "dest": "/api/fs.ts"
     },
     {
+      "src": "/api/public/(.*)",
+      "dest": "/api/public.ts"
+    },
+    {
       "src": "^/api/(.*)$",
       "dest": "/api/$1"
     },
