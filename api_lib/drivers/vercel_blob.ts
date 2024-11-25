@@ -1,9 +1,10 @@
-import { list, head } from "@vercel/blob"
+import { list, head, put, del } from "@vercel/blob"
 
 import { ObjType, Obj } from "../../src/types/obj.js"
 import { getFileType } from "../filetypes.js"
+import { Driver } from "./base.js"
 
-export default class VercelBlob {
+export default class VercelBlob implements Driver {
   async List(dir: string, args: any): Promise<Obj[]> {
     let prefix = dir.slice(1) + "/"
     if (prefix == "/") {
@@ -105,5 +106,27 @@ export default class VercelBlob {
       //   provider: "VercelBlob",
       //   related: null,
     }
+  }
+
+  async MakeDir(parentDir: Obj, dirName: string) {
+    const path = parentDir.path + "/" + dirName
+    await put(path + "/", new Blob(), {
+      access: "public",
+      addRandomSuffix: false,
+    })
+  }
+
+  async Put(dstDir: Obj, file: Blob) {
+    await put(dstDir.path, file, {
+      access: "public",
+      addRandomSuffix: false,
+    })
+  }
+
+  async Remove(obj: Obj) {
+    let url = process.env.BLOB_URL + obj.path
+    await del(url)
+    // in case of directory
+    await del(url + "/")
   }
 }

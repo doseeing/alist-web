@@ -1,4 +1,5 @@
-import { put } from "@vercel/blob"
+import VercelBlob from "../../drivers/vercel_blob.js"
+import { ObjType } from "../../../src/types/obj.js"
 
 export async function PUT(request: Request) {
   const filePath = request.headers.get("File-Path")
@@ -6,10 +7,21 @@ export async function PUT(request: Request) {
   if (!filePath) {
     return new Response("File-Path header is required", { status: 400 })
   }
-  const blob = await put(filePath, fileContent, {
-    access: "public",
-    addRandomSuffix: false,
-  })
+
+  const driver = new VercelBlob()
+  await driver.Put(
+    {
+      path: filePath,
+      name: "",
+      size: 0,
+      is_dir: true,
+      modified: "",
+      sign: "",
+      thumb: "",
+      type: ObjType.FOLDER,
+    },
+    fileContent,
+  )
   const data = {
     code: 200,
     message: "success",
