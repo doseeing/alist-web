@@ -28,15 +28,31 @@ export async function POST(request: Request) {
   if (body.path === "/") {
     return new Response(JSON.stringify(rootResult))
   }
-
-  const response = await head(process.env.BLOB_URL + body.path)
+  let response = null
+  let success = false
+  try {
+    response = await head(process.env.BLOB_URL + body.path)
+  } catch (e) {}
+  if (!success) {
+    try {
+      response = await head(process.env.BLOB_URL + body.path + "/")
+    } catch (e) {}
+  }
+  if (!response) {
+    const failResult = {
+      code: 404,
+      message: "file not found",
+      data: null,
+    }
+    return new Response(JSON.stringify(failResult))
+  }
 
   const pathname = new URL(response.url).pathname.slice(1)
   const modified = response.uploadedAt.toISOString()
   const data = {
     name: decodeURIComponent(pathname.split("/").pop() || ""),
     size: response.size,
-    is_dir: false,
+    is_dir: response.contentType == "application/x-directory",
     modified: modified,
     created: modified,
     sign: "",
