@@ -1,78 +1,42 @@
-import { head } from "@vercel/blob"
-import { getFileType } from "../../filetypes.js"
-import { ObjType } from "../../../src/types/obj.js"
-
-const rootResult = {
-  code: 200,
-  message: "success",
-  data: {
-    name: "disk",
-    size: 0,
-    is_dir: true,
-    modified: "",
-    created: "",
-    sign: "",
-    thumb: "",
-    type: ObjType.UNKNOWN,
-    hashinfo: "null",
-    hash_info: null,
-    raw_url: "",
-    readme: "",
-    header: "",
-    provider: "VercelBlob",
-    related: null,
-  },
-}
+import VercelBlob from "../../drivers/vercel_blob.js"
+import { FsGetResp } from "../../../src/types/resp.js"
 
 export async function POST(request: Request) {
   const body: any = await request.json()
-  if (body.path === "/") {
-    return new Response(JSON.stringify(rootResult))
-  }
-  let response = null
-  let success = false
-  try {
-    response = await head(process.env.BLOB_URL + body.path)
-  } catch (e) {}
-  if (!success) {
-    try {
-      response = await head(process.env.BLOB_URL + body.path + "/")
-    } catch (e) {}
-  }
-  if (!response) {
+  const path = body.path
+  if (!path) {
     const failResult = {
-      code: 404,
-      message: "file not found",
+      code: 400,
+      message: "path is required",
       data: null,
     }
     return new Response(JSON.stringify(failResult))
   }
 
-  const pathname = new URL(response.url).pathname.slice(1)
-  const modified = response.uploadedAt.toISOString()
-  const isDir = response.contentType == "application/x-directory"
-  const data = {
-    name: decodeURIComponent(pathname.split("/").pop() || ""),
-    size: response.size,
-    is_dir: isDir,
-    modified: modified,
-    created: modified,
-    sign: "",
-    thumb: "",
-    type: isDir ? ObjType.FOLDER : getFileType(pathname),
-    hashinfo: "null",
-    hash_info: null,
-    raw_url: response.url,
-    readme: "",
-    header: "",
-    provider: "VercelBlob",
-    related: null,
-  }
-  const fileResult: any = {
-    code: 200,
-    message: "success",
-    data: data,
+  const driver = new VercelBlob()
+  const obj = await driver.Get(path)
+
+  if (!obj) {
+    const result = {
+      code: 404,
+      message: "file not found",
+      data: null,
+    }
+    return new Response(JSON.stringify(result))
   }
 
-  return new Response(JSON.stringify(fileResult))
+  const result: FsGetResp = {
+    code: 200,
+    message: "success",
+    data: {
+      ...obj,
+      raw_url: obj.raw_url,
+      readme: "",
+      header: "",
+      provider: "VercelBlob",
+      related: [],
+    },
+  }
+
+  return new Response(JSON.stringify(result))
 }
