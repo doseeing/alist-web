@@ -1,12 +1,4 @@
-export enum ObjType {
-  UNKNOWN,
-  FOLDER,
-  // OFFICE,
-  VIDEO,
-  AUDIO,
-  TEXT,
-  IMAGE,
-}
+import { ObjType } from "../src/types/obj.js"
 
 const SlicesMap = {
   [ObjType.AUDIO]: "mp3,flac,ogg,m4a,wav,opus,wma".split(","),

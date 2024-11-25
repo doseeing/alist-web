@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { hashPwd } from "../../../hash.js"
+import { hashPwd } from "../../../../src/utils/hash.js"
 
 export async function POST(request: Request) {
   console.log(request)
