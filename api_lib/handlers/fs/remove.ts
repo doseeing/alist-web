@@ -1,4 +1,4 @@
-import VercelBlob from "../../drivers/vercel_blob.js"
+import { getStorage } from "../../driver_route.js"
 import { ObjType } from "../../../src/types/obj.js"
 
 export async function POST(request: Request) {
@@ -7,7 +7,16 @@ export async function POST(request: Request) {
   if (dir === "/") {
     dir = ""
   }
-  const driver = new VercelBlob()
+  const driver = getStorage(dir)
+  if (!driver) {
+    const failResult = {
+      code: 400,
+      message: "driver not found",
+      data: null,
+    }
+    return new Response(JSON.stringify(failResult))
+  }
+
   const names = body.names
   for (const name of names) {
     await driver.Remove({

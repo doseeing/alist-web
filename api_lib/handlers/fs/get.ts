@@ -1,5 +1,5 @@
-import VercelBlob from "../../drivers/vercel_blob.js"
 import { FsGetResp } from "../../../src/types/resp.js"
+import { getStorage } from "../../driver_route.js"
 
 export async function POST(request: Request) {
   const body: any = await request.json()
@@ -13,7 +13,16 @@ export async function POST(request: Request) {
     return new Response(JSON.stringify(failResult))
   }
 
-  const driver = new VercelBlob()
+  const driver = getStorage(path)
+  if (!driver) {
+    const failResult = {
+      code: 400,
+      message: "driver not found",
+      data: null,
+    }
+    return new Response(JSON.stringify(failResult))
+  }
+
   const obj = await driver.Get(path)
 
   if (!obj) {

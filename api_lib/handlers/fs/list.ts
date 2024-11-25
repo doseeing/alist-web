@@ -1,10 +1,19 @@
-import VercelBlob from "../../drivers/vercel_blob.js"
+import { getStorage } from "../../driver_route.js"
 
 export async function POST(request: Request) {
   const body = await request.json()
   const dir = body.path
 
-  const driver = new VercelBlob()
+  const driver = getStorage(dir)
+  if (!driver) {
+    const failResult = {
+      code: 400,
+      message: "driver not found",
+      data: null,
+    }
+    return new Response(JSON.stringify(failResult))
+  }
+
   const objArray = await driver.List(dir, {})
 
   const data = {
