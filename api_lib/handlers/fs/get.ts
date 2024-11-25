@@ -49,15 +49,16 @@ export async function POST(request: Request) {
 
   const pathname = new URL(response.url).pathname.slice(1)
   const modified = response.uploadedAt.toISOString()
+  const isDir = response.contentType == "application/x-directory"
   const data = {
     name: decodeURIComponent(pathname.split("/").pop() || ""),
     size: response.size,
-    is_dir: response.contentType == "application/x-directory",
+    is_dir: isDir,
     modified: modified,
     created: modified,
     sign: "",
     thumb: "",
-    type: getFileType(pathname),
+    type: isDir ? ObjType.FOLDER : getFileType(pathname),
     hashinfo: "null",
     hash_info: null,
     raw_url: response.url,
