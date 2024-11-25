@@ -23,6 +23,9 @@ importers:
       '@motionone/solid':
         specifier: ^10.14.1
         version: 10.14.1(solid-js@1.4.8)
+      '@opentelemetry/api':
+        specifier: ^1.9.0
+        version: 1.9.0
       '@solid-primitives/i18n':
         specifier: ^1.1.0
         version: 1.1.0(solid-js@1.4.8)
@@ -38,6 +41,9 @@ importers:
       '@vercel/blob':
         specifier: ^0.26.0
         version: 0.26.0
+      '@vercel/edge-config':
+        specifier: ^1.4.0
+        version: 1.4.0(@opentelemetry/api@1.9.0)
       '@viselect/vanilla':
         specifier: ^3.5.0
         version: 3.5.0
@@ -752,6 +758,10 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
+  '@opentelemetry/api@1.9.0':
+    resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==, tarball: https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz}
+    engines: {node: '>=8.0.0'}
+
   '@rollup/pluginutils@4.2.1':
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==, tarball: https://registry.npmmirror.com/@rollup/pluginutils/-/pluginutils-4.2.1.tgz}
     engines: {node: '>= 8.0.0'}
@@ -865,6 +875,18 @@ packages:
 
   '@vercel/build-utils@8.4.12':
     resolution: {integrity: sha512-pIH0b965wJhd1otROVPndfZenPKFVoYSaRjtSKVOT/oNBT13ifq86UVjb5ZjoVfqUI2TtSTP+68kBqLPeoq30g==, tarball: https://registry.npmmirror.com/@vercel/build-utils/-/build-utils-8.4.12.tgz}
+
+  '@vercel/edge-config-fs@0.1.0':
+    resolution: {integrity: sha512-NRIBwfcS0bUoUbRWlNGetqjvLSwgYH/BqKqDN7vK1g32p7dN96k0712COgaz6VFizAm9b0g6IG6hR6+hc0KCPg==, tarball: https://registry.npmmirror.com/@vercel/edge-config-fs/-/edge-config-fs-0.1.0.tgz}
+
+  '@vercel/edge-config@1.4.0':
+    resolution: {integrity: sha512-69Wg5gw9DzwnyUmnjToSeLRm1nm8mCPgN0kflX8EHRHyqvzH80wPem5A8rI2LXPb2Y9tJNoqN3vXPcQhS2Wh5g==, tarball: https://registry.npmmirror.com/@vercel/edge-config/-/edge-config-1.4.0.tgz}
+    engines: {node: '>=14.6'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.7.0
+    peerDependenciesMeta:
+      '@opentelemetry/api':
+        optional: true
 
   '@vercel/nft@0.27.6':
     resolution: {integrity: sha512-mwuyUxskdcV8dd7N7JnxBgvFEz1D9UOePI/WyLLzktv6HSCwgPNQGit/UJ2IykAWGlypKw4pBQjOKWvIbXITSg==, tarball: https://registry.npmmirror.com/@vercel/nft/-/nft-0.27.6.tgz}
@@ -2969,6 +2991,8 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
+  '@opentelemetry/api@1.9.0': {}
+
   '@rollup/pluginutils@4.2.1':
     dependencies:
       estree-walker: 2.0.2
@@ -3083,6 +3107,14 @@ snapshots:
       undici: 5.28.4
 
   '@vercel/build-utils@8.4.12': {}
+
+  '@vercel/edge-config-fs@0.1.0': {}
+
+  '@vercel/edge-config@1.4.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@vercel/edge-config-fs': 0.1.0
+    optionalDependencies:
+      '@opentelemetry/api': 1.9.0
 
   '@vercel/nft@0.27.6':
     dependencies:
