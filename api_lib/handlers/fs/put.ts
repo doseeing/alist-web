@@ -3,7 +3,12 @@ import { ObjType } from "../../../src/types/obj.js"
 
 export async function PUT(request: Request) {
   const filePath = request.headers.get("File-Path")
-  const fileContent = await request.blob()
+  let fileContent = await request.blob()
+
+  if (fileContent.size === 0) {
+    // not support empty blob
+    fileContent = new Blob([" "])
+  }
   if (!filePath) {
     return new Response("File-Path header is required", { status: 400 })
   }
