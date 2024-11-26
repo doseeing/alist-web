@@ -111,7 +111,7 @@ export default class GoogleDrive implements Driver {
       files = await this.ApiList(fileId)
       segments.shift()
       if (segments.length > 0) {
-        const name = segments[0]
+        const name = decodeURIComponent(segments[0])
 
         const file = files.find((f) => f.name === name)
         if (file) {
