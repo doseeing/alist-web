@@ -22,8 +22,8 @@ export async function POST(request: Request) {
     }
     return new Response(JSON.stringify(failResult))
   }
-
-  const obj = await driver.Get(path)
+  const origin = new URL(request.url).origin
+  const obj = await driver.Get(path, { origin })
 
   if (!obj) {
     const result = {

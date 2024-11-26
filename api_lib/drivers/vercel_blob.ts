@@ -50,7 +50,10 @@ export default class VercelBlob implements Driver {
     return content
   }
 
-  async Get(path: string): Promise<(Obj & { raw_url: string }) | null> {
+  async Get(
+    path: string,
+    args: any,
+  ): Promise<(Obj & { raw_url: string }) | null> {
     if (path === "/") {
       return {
         path: "",
@@ -128,5 +131,14 @@ export default class VercelBlob implements Driver {
     await del(url)
     // in case of directory
     await del(url + "/")
+  }
+
+  async Link(file: Obj, args: any) {
+    const path = file.path
+    const url = process.env.BLOB_URL + path
+    return {
+      URL: url,
+      Header: {},
+    }
   }
 }

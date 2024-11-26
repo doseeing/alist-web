@@ -4,11 +4,25 @@ import { Driver } from "./base.js"
 import { setupProxy } from "../dev.js"
 import { get, set } from "../kv.js"
 
-type ObjWithId = Obj & { id: string }
+type File = {
+  id: string
+  name: string
+  mimeType: string
+  size: number
+  modifiedTime: string
+  createdTime: string
+  thumbnailLink: string
+  shortcutDetails: any
+  md5Checksum: string
+  sha1Checksum: string
+  sha256Checksum: string
+}
 export default class GoogleDrive implements Driver {
+  constructor() {
+    setupProxy()
+  }
   async refreshToken() {
     const url = "https://www.googleapis.com/oauth2/v4/token"
-    setupProxy()
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -26,7 +40,6 @@ export default class GoogleDrive implements Driver {
   }
 
   async request(url: string) {
-    setupProxy()
     const accessToken = await get("google_drive_access_token")
     if (accessToken === undefined) {
       const accessToken = await this.refreshToken()
@@ -55,7 +68,25 @@ export default class GoogleDrive implements Driver {
     return data
   }
 
-  async _List(fileId: string): Promise<ObjWithId[]> {
+  fileToObj(file: File): Obj {
+    return {
+      path: "",
+      name: file.name,
+      size: file.size,
+      is_dir: file.mimeType == "application/vnd.google-apps.folder",
+      modified: file.modifiedTime,
+      // created: file.createdTime,
+      sign: "",
+      thumb: file.thumbnailLink,
+      type:
+        file.mimeType == "application/vnd.google-apps.folder"
+          ? ObjType.FOLDER
+          : getFileType(file.name),
+      // hashinfo: "null",
+      // hash_info: null,
+    }
+  }
+  async ApiList(fileId: string): Promise<File[]> {
     const query = {
       orderBy: "folder,name,modifiedTime desc",
       fields:
@@ -70,41 +101,19 @@ export default class GoogleDrive implements Driver {
     const url2 = (url + "?" + new URLSearchParams(query).toString()) as string
 
     const data = await this.request(url2)
-    const content: ObjWithId[] = []
-
-    data.files.forEach((file: any) => {
-      content.push({
-        id: file.id,
-        path: "",
-        name: file.name,
-        size: file.size,
-        is_dir: file.mimeType == "application/vnd.google-apps.folder",
-        modified: file.modifiedTime,
-        // created: file.createdTime,
-        sign: "",
-        thumb: file.thumbnailLink,
-        type:
-          file.mimeType == "application/vnd.google-apps.folder"
-            ? ObjType.FOLDER
-            : getFileType(file.name),
-        // hashinfo: "null",
-        // hash_info: null,
-      })
-    })
-    return content
+    return data.files
   }
-  async List(dir: string, args: any): Promise<Obj[]> {
-    setupProxy()
+  async getFiles(dir: string): Promise<File[]> {
     const segments = dir === "/" ? [""] : dir.split("/")
     let fileId = process.env.GOOGLE_ROOT_FILE_ID || ""
-    let result: ObjWithId[] = []
+    let files: File[] = []
     while (segments.length > 0) {
-      result = await this._List(fileId)
+      files = await this.ApiList(fileId)
       segments.shift()
       if (segments.length > 0) {
         const name = segments[0]
 
-        const file = result.find((f) => f.name === name)
+        const file = files.find((f) => f.name === name)
         if (file) {
           fileId = file.id
         } else {
@@ -112,11 +121,26 @@ export default class GoogleDrive implements Driver {
         }
       }
     }
-
-    return result
+    return files
   }
 
-  async Get(path: string): Promise<(Obj & { raw_url: string }) | null> {
+  async List(dir: string, args: any): Promise<Obj[]> {
+    return (await this.getFiles(dir)).map(this.fileToObj)
+  }
+
+  async ApiGet(path: string): Promise<File | undefined> {
+    const parentDir = path.split("/").slice(0, -1).join("/")
+    let fileName = path.split("/").pop() || ""
+    const files = await this.getFiles(parentDir)
+    fileName = decodeURIComponent(fileName)
+    const file = files.find((f) => f.name === fileName)
+    return file
+  }
+
+  async Get(
+    path: string,
+    args: any,
+  ): Promise<(Obj & { raw_url: string }) | null> {
     if (path === "/") {
       return {
         path: "",
@@ -145,7 +169,8 @@ export default class GoogleDrive implements Driver {
     if (file) {
       return {
         ...file,
-        raw_url: "",
+        raw_url:
+          file.type === ObjType.IMAGE ? file.thumb : `${args.origin}/p${path}`,
       }
     }
     return null
@@ -156,4 +181,25 @@ export default class GoogleDrive implements Driver {
   async Put(dstDir: Obj, file: Blob) {}
 
   async Remove(obj: Obj) {}
+
+  async Link(file: Obj, args: any) {
+    const info = await this.ApiGet(file.path)
+    const base = args.base
+    if (!info) {
+      return {
+        URL: "",
+        Header: {
+          Authorization: "",
+        },
+      }
+    }
+    return {
+      URL:
+        `https://www.googleapis.com/drive/v3/files/${info.id}?includeItemsFromAllDrives=true&supportsAllDrives=true` +
+        "&alt=media&acknowledgeAbuse=true",
+      Header: {
+        Authorization: `Bearer ${await get("google_drive_access_token")}`,
+      },
+    }
+  }
 }
