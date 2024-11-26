@@ -137,6 +137,17 @@ export default class GoogleDrive implements Driver {
         // related: null,
       }
     }
+    // list parent dir to get file info
+    const parentDir = path.split("/").slice(0, -1).join("/")
+    const fileName = path.split("/").pop()
+    const files = await this.List(parentDir, {})
+    const file = files.find((f) => f.name === fileName)
+    if (file) {
+      return {
+        ...file,
+        raw_url: "",
+      }
+    }
     return null
   }
 
