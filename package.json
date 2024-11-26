@@ -97,7 +97,8 @@
     "solid-markdown": "^1.2.0",
     "solid-transition-group": "^0.0.12",
     "streamsaver": "^2.0.6",
-    "typescript-natural-sort": "^0.7.2"
+    "typescript-natural-sort": "^0.7.2",
+    "undici": "^6.21.0"
   },
   "lint-staged": {
     "**/*": "prettier --write"
