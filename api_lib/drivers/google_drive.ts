@@ -180,12 +180,30 @@ export default class GoogleDrive implements Driver {
     return null
   }
 
-  async MakeDir(parentDir: Obj, dirName: string) {}
+  async MakeDir(parentDir: Obj, dirName: string) {
+    const parentId = await this.getParentId(parentDir.path + "/" + dirName)
+    console.log(parentId)
+    if (parentId == "") {
+      return
+    }
+    const response = await this.request(
+      "https://www.googleapis.com/drive/v3/files",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: dirName,
+          mimeType: "application/vnd.google-apps.folder",
+          parents: [parentId],
+        }),
+      },
+    )
+  }
 
-  async Put(dstFile: Obj, bin: Blob, args: any) {
-    const url =
-      "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true"
-    let parentPath = dstFile.path.split("/").slice(0, -1).join("/")
+  async getParentId(path: string) {
+    let parentPath = path.split("/").slice(0, -1).join("/")
     let parentId = ""
     if (parentPath === "") {
       parentId = process.env.GOOGLE_ROOT_FILE_ID || ""
@@ -193,7 +211,17 @@ export default class GoogleDrive implements Driver {
       const parentDir = await this.ApiGet(parentPath)
       parentId = parentDir?.id || ""
     }
+    return parentId
+  }
 
+  async Put(dstFile: Obj, bin: Blob, args: any) {
+    const url =
+      "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true"
+
+    let parentId = await this.getParentId(dstFile.path)
+    if (parentId === "") {
+      return
+    }
     const response = await this.request(url, {
       method: "POST",
       headers: {
