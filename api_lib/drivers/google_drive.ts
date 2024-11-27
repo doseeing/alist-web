@@ -247,7 +247,15 @@ export default class GoogleDrive implements Driver {
     return
   }
 
-  async Remove(obj: Obj) {}
+  async Remove(obj: Obj) {
+    const file = await this.ApiGet(obj.path)
+    if (file) {
+      const url = `https://www.googleapis.com/drive/v3/files/${file.id}`
+      const response = await this.request(url, {
+        method: "DELETE",
+      })
+    }
+  }
 
   async Link(file: Obj, args: any) {
     const info = await this.ApiGet(file.path)
