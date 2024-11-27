@@ -2,7 +2,8 @@ import { getStorage } from "../../driver_route.js"
 import { ObjType } from "../../../src/types/obj.js"
 
 export async function PUT(request: Request) {
-  const filePath = request.headers.get("File-Path")
+  const filePath = decodeURIComponent(request.headers.get("File-Path") || "")
+  const mimeType = request.headers.get("Content-Type")
   let fileContent = await request.blob()
 
   if (fileContent.size === 0) {
@@ -22,11 +23,11 @@ export async function PUT(request: Request) {
     }
     return new Response(JSON.stringify(failResult))
   }
-
+  const name = filePath.split("/").pop() || ""
   await driver.Put(
     {
       path: filePath,
-      name: "",
+      name: name,
       size: 0,
       is_dir: true,
       modified: "",
@@ -35,6 +36,7 @@ export async function PUT(request: Request) {
       type: ObjType.FOLDER,
     },
     fileContent,
+    { mimeType: mimeType || "" },
   )
   const data = {
     code: 200,

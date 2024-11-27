@@ -119,8 +119,8 @@ export default class VercelBlob implements Driver {
     })
   }
 
-  async Put(dstDir: Obj, file: Blob) {
-    await put(dstDir.path, file, {
+  async Put(file: Obj, data: Blob, args: any) {
+    await put(file.path, data, {
       access: "public",
       addRandomSuffix: false,
     })

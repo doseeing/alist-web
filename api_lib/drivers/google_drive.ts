@@ -39,7 +39,7 @@ export default class GoogleDrive implements Driver {
     return data.access_token
   }
 
-  async request(url: string) {
+  async request(url: string, options?: RequestInit) {
     const accessToken = await get("google_drive_access_token")
     if (accessToken === undefined) {
       const accessToken = await this.refreshToken()
@@ -48,24 +48,27 @@ export default class GoogleDrive implements Driver {
     const url2 = url as string
 
     let response = await fetch(url2, {
+      ...options,
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        ...options?.headers,
       },
     })
-    let data = await response.json()
-    if (data.error && data.error.code === 401) {
+
+    if (response.status === 401) {
       console.log("refreshing token")
       const accessToken = await this.refreshToken()
-
       await set("google_drive_access_token", accessToken)
+
       response = await fetch(url2, {
+        ...options,
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          ...options?.headers,
         },
       })
-      data = await response.json()
     }
-    return data
+    return response
   }
 
   fileToObj(file: File): Obj {
@@ -100,7 +103,8 @@ export default class GoogleDrive implements Driver {
     const url = "https://www.googleapis.com/drive/v3/files"
     const url2 = (url + "?" + new URLSearchParams(query).toString()) as string
 
-    const data = await this.request(url2)
+    const response = await this.request(url2)
+    const data = await response.json()
     return data.files
   }
   async getFiles(dir: string): Promise<File[]> {
@@ -178,7 +182,42 @@ export default class GoogleDrive implements Driver {
 
   async MakeDir(parentDir: Obj, dirName: string) {}
 
-  async Put(dstDir: Obj, file: Blob) {}
+  async Put(dstFile: Obj, bin: Blob, args: any) {
+    const url =
+      "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true"
+    let parentPath = dstFile.path.split("/").slice(0, -1).join("/")
+    let parentId = ""
+    if (parentPath === "") {
+      parentId = process.env.GOOGLE_ROOT_FILE_ID || ""
+    } else {
+      const parentDir = await this.ApiGet(parentPath)
+      parentId = parentDir?.id || ""
+    }
+
+    const response = await this.request(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Upload-Content-Type": args.mimeType,
+        "X-Upload-Content-Length": bin.size.toString(),
+      },
+      body: JSON.stringify({
+        name: dstFile.name,
+        parents: [parentId],
+      }),
+    })
+
+    const location = response.headers.get("Location")
+    const response2 = await this.request(location as string, {
+      method: "PUT",
+      headers: {
+        "Content-Length": bin.size.toString(),
+      },
+      body: bin,
+    })
+
+    return
+  }
 
   async Remove(obj: Obj) {}
 
