@@ -175,7 +175,9 @@ export default class GoogleDrive implements Driver {
       return {
         ...file,
         raw_url:
-          file.type === ObjType.IMAGE ? file.thumb : `${args.origin}/p${path}`,
+          file.type === ObjType.IMAGE
+            ? file.thumb
+            : `${args.origin}/p${this.mountPath}${path}`,
       }
     }
     return null
