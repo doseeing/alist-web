@@ -5,6 +5,7 @@ import { getFileType } from "../filetypes.js"
 import { Driver } from "./base.js"
 
 export default class VercelBlob implements Driver {
+  mountPath = process.env.BLOB_MOUNT_PATH || null
   async List(dir: string, args: any): Promise<Obj[]> {
     let prefix = dir.slice(1) + "/"
     if (prefix == "/") {
@@ -112,7 +113,12 @@ export default class VercelBlob implements Driver {
   }
 
   async MakeDir(parentDir: Obj, dirName: string) {
-    const path = parentDir.path + "/" + dirName
+    let prefix = parentDir.path
+    if (prefix === "/") {
+      prefix = ""
+    }
+    const path = prefix + "/" + dirName
+
     await put(path + "/", new Blob(), {
       access: "public",
       addRandomSuffix: false,

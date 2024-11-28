@@ -3,7 +3,7 @@ import { getFileType } from "../filetypes.js"
 import { Driver } from "./base.js"
 import { setupProxy } from "../dev.js"
 import { get, set } from "../kv.js"
-
+import { getParentDir } from "../utils.js"
 type File = {
   id: string
   name: string
@@ -18,6 +18,7 @@ type File = {
   sha256Checksum: string
 }
 export default class GoogleDrive implements Driver {
+  mountPath = process.env.GOOGLE_MOUNT_PATH || null
   constructor() {
     setupProxy()
   }
@@ -133,7 +134,7 @@ export default class GoogleDrive implements Driver {
   }
 
   async ApiGet(path: string): Promise<File | undefined> {
-    const parentDir = path.split("/").slice(0, -1).join("/")
+    const parentDir = getParentDir(path)
     let fileName = path.split("/").pop() || ""
     const files = await this.getFiles(parentDir)
     fileName = decodeURIComponent(fileName)
@@ -166,7 +167,7 @@ export default class GoogleDrive implements Driver {
       }
     }
     // list parent dir to get file info
-    const parentDir = path.split("/").slice(0, -1).join("/")
+    const parentDir = getParentDir(path)
     const fileName = path.split("/").pop()
     const files = await this.List(parentDir, {})
     const file = files.find((f) => f.name === fileName)
@@ -182,7 +183,6 @@ export default class GoogleDrive implements Driver {
 
   async MakeDir(parentDir: Obj, dirName: string) {
     const parentId = await this.getParentId(parentDir.path + "/" + dirName)
-    console.log(parentId)
     if (parentId == "") {
       return
     }
@@ -203,9 +203,9 @@ export default class GoogleDrive implements Driver {
   }
 
   async getParentId(path: string) {
-    let parentPath = path.split("/").slice(0, -1).join("/")
+    let parentPath = getParentDir(path)
     let parentId = ""
-    if (parentPath === "") {
+    if (parentPath === "/") {
       parentId = process.env.GOOGLE_ROOT_FILE_ID || ""
     } else {
       const parentDir = await this.ApiGet(parentPath)

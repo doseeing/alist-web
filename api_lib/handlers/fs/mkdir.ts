@@ -1,5 +1,6 @@
-import { getStorage } from "../../driver_route.js"
+import { getStorageActualPath } from "../../driver_route.js"
 import { ObjType } from "../../../src/types/obj.js"
+import { getParentDir } from "../../utils.js"
 
 export async function POST(request: Request) {
   const body = await request.json()
@@ -9,7 +10,8 @@ export async function POST(request: Request) {
     return new Response("File Path header is required", { status: 400 })
   }
 
-  const driver = getStorage(filePath)
+  const { driver, actualPath } = getStorageActualPath(filePath)
+
   if (!driver) {
     const failResult = {
       code: 400,
@@ -19,8 +21,8 @@ export async function POST(request: Request) {
     return new Response(JSON.stringify(failResult))
   }
 
-  const parentDir = filePath.split("/").slice(0, -1).join("/")
-  const dir = filePath.split("/").pop()
+  const parentDir = getParentDir(actualPath)
+  const dir = actualPath.split("/").pop() || ""
   await driver.MakeDir(
     {
       path: parentDir,

@@ -1,4 +1,4 @@
-import { getStorage } from "../api_lib/driver_route.js"
+import { getStorageActualPath } from "../api_lib/driver_route.js"
 
 export async function GET(request: Request) {
   // get path name from url
@@ -6,14 +6,14 @@ export async function GET(request: Request) {
   // remove prefix /p
   pathname = pathname.slice(2)
 
-  const driver = getStorage(pathname)
+  const { driver, actualPath } = getStorageActualPath(pathname)
   if (driver === null) {
     return new Response("Not Found", { status: 404 })
   }
 
   const link = await driver.Link(
     {
-      path: pathname,
+      path: actualPath,
       name: "",
       size: 0,
       is_dir: false,

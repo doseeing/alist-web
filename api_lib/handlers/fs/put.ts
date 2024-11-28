@@ -1,4 +1,4 @@
-import { getStorage } from "../../driver_route.js"
+import { getStorageActualPath } from "../../driver_route.js"
 import { ObjType } from "../../../src/types/obj.js"
 
 export async function PUT(request: Request) {
@@ -14,7 +14,7 @@ export async function PUT(request: Request) {
     return new Response("File-Path header is required", { status: 400 })
   }
 
-  const driver = getStorage(filePath)
+  const { driver, actualPath } = getStorageActualPath(filePath)
   if (!driver) {
     const failResult = {
       code: 400,
@@ -23,10 +23,10 @@ export async function PUT(request: Request) {
     }
     return new Response(JSON.stringify(failResult))
   }
-  const name = filePath.split("/").pop() || ""
+  const name = actualPath.split("/").pop() || ""
   await driver.Put(
     {
-      path: filePath,
+      path: actualPath,
       name: name,
       size: 0,
       is_dir: true,

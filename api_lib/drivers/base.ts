@@ -1,6 +1,7 @@
 import { Obj } from "../../src/types/obj.js"
 import { Link } from "../types.js"
 export interface Driver {
+  mountPath: string | null
   List: (dir: string, args: any) => Promise<Obj[]>
   Get: (path: string, args: any) => Promise<(Obj & { raw_url: string }) | null>
   MakeDir: (parentDir: Obj, dirName: string) => Promise<void>
