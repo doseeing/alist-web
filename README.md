@@ -1,3 +1,7 @@
+## Deploy to vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdoseeing%2Falist-web&env=ADMIN_USERNAME,ADMIN_PASSWORD,JWT_SECRET)
+
 ## Usage
 
 Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
