@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "installCommand": "git submodule update --init --recursive && pnpm install",
+  "installCommand": "git submodule add https://github.com/alist-org/solid-router solid-router && git submodule update --init --recursive && pnpm install",
   "routes": [
     {
       "src": "/p/(.*)",
