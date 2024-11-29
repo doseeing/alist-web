@@ -24,6 +24,9 @@ export async function GET(request: Request) {
     },
     {},
   )
+  if (link.Data) {
+    return new Response(link.Data)
+  }
   if (link.URL === "") {
     return new Response("Not Found", { status: 404 })
   }
