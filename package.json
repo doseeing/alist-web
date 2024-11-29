@@ -20,6 +20,9 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": "20.x"
+  },
   "homepage": "https://alist.nn.ci",
   "scripts": {
     "crowdin:upload": "crowdin upload sources --auto-update",
