@@ -24,6 +24,9 @@ export async function GET(request: Request) {
     },
     {},
   )
+  if (link.Redirect) {
+    return Response.redirect(link.Redirect, 302)
+  }
   if (link.Data) {
     return new Response(link.Data)
   }

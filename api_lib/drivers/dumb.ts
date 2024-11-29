@@ -16,6 +16,15 @@ export default class Dumb implements Driver {
         type: ObjType.TEXT,
         path: "",
       },
+      {
+        name: "demo.m3u8",
+        size: 100,
+        is_dir: false,
+        modified: "",
+        thumb: "",
+        type: ObjType.VIDEO,
+        path: "",
+      },
     ]
   }
 
@@ -48,6 +57,18 @@ export default class Dumb implements Driver {
         raw_url: `${args.origin}/p${this.mountPath}${path}`,
       }
     }
+    if (path === "/demo.m3u8") {
+      return {
+        name: "demo.m3u8",
+        size: 100,
+        is_dir: false,
+        modified: "",
+        thumb: "",
+        type: ObjType.VIDEO,
+        path: "",
+        raw_url: `${args.origin}/p${this.mountPath}${path}`,
+      }
+    }
     return null
   }
 
@@ -72,6 +93,13 @@ export default class Dumb implements Driver {
         Data: new Blob([
           "## Dumb Driver\n\nThis is a dumb driver for testing purposes.",
         ]),
+      }
+    }
+    if (file.path === "/demo.m3u8") {
+      return {
+        URL: `${args.origin}/p${this.mountPath}${file.path}`,
+        Redirect: `https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8`,
+        Header: {},
       }
     }
     return { URL: "", Header: {} }

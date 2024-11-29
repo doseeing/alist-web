@@ -10,5 +10,6 @@ export type Link = {
   // //for accelerating request, use multi-thread downloading
   // Concurrency int `json:"concurrency"`
   // PartSize    int `json:"part_size"`
-  Data?: Blob | null
+  Data?: Blob
+  Redirect?: string
 }

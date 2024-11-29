@@ -51,8 +51,8 @@ importers:
         specifier: ^1.10.1
         version: 1.10.1
       artplayer:
-        specifier: ^5.0.9
-        version: 5.0.9
+        specifier: ^5.2.1
+        version: 5.2.1
       artplayer-plugin-danmuku:
         specifier: ^5.0.1
         version: 5.0.1
@@ -75,8 +75,8 @@ importers:
         specifier: ^1.6.2
         version: 1.6.2
       hls.js:
-        specifier: ^1.2.1
-        version: 1.2.1
+        specifier: ^1.5.17
+        version: 1.5.17
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -978,8 +978,8 @@ packages:
   artplayer-plugin-danmuku@5.0.1:
     resolution: {integrity: sha512-b6/Y4/+X0rNmnqS5+zzQgow+WW4iVT8eFv4LAUzJgIyORIcf5Gn00Dy0PZ+kwGb1VJy0CUCRK6gVVvh0tWsRAg==}
 
-  artplayer@5.0.9:
-    resolution: {integrity: sha512-IM/DShYdmKFEA9jl08LYbTK2Jfz9s7qIjEH0xWjnxvVArUKZZKcoqwr6i54U0c4grtc/Uvb4wtCd78kvtSVlgw==}
+  artplayer@5.2.1:
+    resolution: {integrity: sha512-xhNE9zSLT2z4O2CJwcMSWADsS3Cvq0PwNanvMzRsqgfUhsMOpum8HlMtIUPOTyMGjIhKV8sl109HFUalQK6WJQ==, tarball: https://registry.npmmirror.com/artplayer/-/artplayer-5.2.1.tgz}
 
   asciinema-player@3.6.3:
     resolution: {integrity: sha512-62aDgLpbuduhmpFfNgPOzf6fOluACLsftVnjpWJjUXX6dqhqTckFqWoJ+ayA0XjSlZ9l9wXTcJqRqvAAIpMblg==}
@@ -1443,8 +1443,8 @@ packages:
   hey-listen@1.0.8:
     resolution: {integrity: sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==}
 
-  hls.js@1.2.1:
-    resolution: {integrity: sha512-+m/5+ikSpmQQvb6FmVWZUZfzvTJMn/QVfiCGP1Oq9WW4RKrAvxlExkhhbcVGgGqLNPFk1kdFkVQur//wKu3JVw==}
+  hls.js@1.5.17:
+    resolution: {integrity: sha512-wA66nnYFvQa1o4DO/BFgLNRKnBTVXpNeldGRBJ2Y0SvFtdwvFKCbqa9zhHoZLoxHhZ+jYsj3aIBkWQQCPNOhMw==, tarball: https://registry.npmmirror.com/hls.js/-/hls.js-1.5.17.tgz}
 
   html-entities@2.3.2:
     resolution: {integrity: sha512-c3Ab/url5ksaT0WyleslpBEthOzWhrjQbg75y7XUsfSzi3Dgzt0l8w5e7DylRn15MTlMMD58dTfzddNS2kcAjQ==}
@@ -1579,7 +1579,7 @@ packages:
     hasBin: true
 
   kind-of@6.0.3:
-    resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
+    resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==, tarball: https://registry.npmmirror.com/kind-of/-/kind-of-6.0.3.tgz}
     engines: {node: '>=0.10.0'}
 
   kleur@4.1.5:
@@ -1936,7 +1936,7 @@ packages:
     engines: {node: '>=12'}
 
   option-validator@2.0.6:
-    resolution: {integrity: sha512-tmZDan2LRIRQyhUGvkff68/O0R8UmF+Btmiiz0SmSw2ng3CfPZB9wJlIjHpe/MKUZqyIZkVIXCrwr1tIN+0Dzg==}
+    resolution: {integrity: sha512-tmZDan2LRIRQyhUGvkff68/O0R8UmF+Btmiiz0SmSw2ng3CfPZB9wJlIjHpe/MKUZqyIZkVIXCrwr1tIN+0Dzg==, tarball: https://registry.npmmirror.com/option-validator/-/option-validator-2.0.6.tgz}
 
   p-map@4.0.0:
     resolution: {integrity: sha512-/bjOqmgETBYB5BoEeGVea8dmvHb2m9GLy1E9W43yeyfP6QQCZGFNa+XRceJEuDB6zqr+gKpIAmlLebMpykw/MQ==}
@@ -3223,7 +3223,7 @@ snapshots:
 
   artplayer-plugin-danmuku@5.0.1: {}
 
-  artplayer@5.0.9:
+  artplayer@5.2.1:
     dependencies:
       option-validator: 2.0.6
 
@@ -3765,7 +3765,7 @@ snapshots:
 
   hey-listen@1.0.8: {}
 
-  hls.js@1.2.1: {}
+  hls.js@1.5.17: {}
 
   html-entities@2.3.2: {}
 
